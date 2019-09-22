@@ -1,0 +1,23 @@
+{
+  "name": "jeekens/router",
+  "type": "library",
+  "version": "v0.0.1",
+  "keywords": [
+    "php",
+    "swoole",
+    "jeekens",
+    "router"
+  ],
+  "description": "jeekens router component",
+  "license": "Apache-2.0",
+  "require": {
+    "php": ">7.2",
+    "psr/http-message": "~1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Jeekens\\Router\\": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}
