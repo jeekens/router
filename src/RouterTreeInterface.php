@@ -65,4 +65,11 @@ interface RouterTreeInterface
      */
     public function getSubNode(int $nodeId): ?array;
 
+    /**
+     * 创建一个新的节点
+     *
+     * @return RouterTreeNodeInterface
+     */
+    public function newNode(): RouterTreeNodeInterface;
+
 }

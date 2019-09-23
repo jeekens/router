@@ -15,8 +15,9 @@ interface RouterTreeNodeInterface
      * 添加子节点
      *
      * @param RouterTreeNodeInterface $node
+     * @param RouterTreeInterface $routerTree
      */
-    public function addSubNode(RouterTreeNodeInterface $node);
+    public function addSubNode(RouterTreeNodeInterface $node, RouterTreeInterface $routerTree);
 
     /**
      * 设置路由节点id
@@ -120,6 +121,13 @@ interface RouterTreeNodeInterface
      * @return int
      */
     public function parentNodeId(): int;
+
+    /**
+     * 获取匹配规则按目录分割后的数组
+     *
+     * @return array|null
+     */
+    public function patch(): ?array;
 
     /**
      * 对比路径串并将匹配到的是值赋值给data变量

@@ -7,6 +7,11 @@ namespace Jeekens\Router;
 use function array_filter;
 use function array_values;
 
+/**
+ * Class RouterTree
+ *
+ * @package Jeekens\Router
+ */
 class RouterTree implements RouterTreeInterface
 {
 
@@ -34,13 +39,15 @@ class RouterTree implements RouterTreeInterface
         if ($path === '/') {
             $rootNode->setMethods($method);
             $rootNode->setGroupNames($router);
+            $rootNode->setPattern($router, '/');
             $rootNode->setIsLeaf();
             return $rootNode;
         } else {
             $node = $this->newNode();
             $node->setMethods($method);
             $node->setPattern($router, $path);
-            $rootNode->addSubNode($node);
+            $node->setIsLeaf(true);
+            $rootNode->addSubNode($node, $this);
             return $node;
         }
     }
@@ -48,7 +55,7 @@ class RouterTree implements RouterTreeInterface
 
     public function getRouterTreeNode(int $nodeId): ?RouterTreeNodeInterface
     {
-        // TODO: Implement getRouterTreeNode() method.
+        return $this->tree[$nodeId]['node'] ?? null;
     }
 
 
@@ -66,7 +73,7 @@ class RouterTree implements RouterTreeInterface
     }
 
 
-    protected function newNode(): RouterTreeNodeInterface
+    public function newNode(): RouterTreeNodeInterface
     {
         $node = new $this->nodeClass;
         $node->setNodeId($this->startIndex++);

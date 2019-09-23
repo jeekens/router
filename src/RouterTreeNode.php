@@ -67,10 +67,20 @@ class RouterTreeNode implements RouterTreeNodeInterface
      */
     protected $patternIsString = false;
 
+    /**
+     * @var null|array
+     */
+    protected $patch = null;
 
-    public function addSubNode(RouterTreeNodeInterface $node)
+
+    public function addSubNode(RouterTreeNodeInterface $node, RouterTreeInterface $tree)
     {
-        // TODO: Implement addSubNode() method.
+        $subNodes = $tree->getSubNode($this->nodeId());
+
+        if (empty($subNodes)) {
+            $node->setParentNodeId($this->nodeId());
+        }
+
     }
 
 
@@ -98,10 +108,18 @@ class RouterTreeNode implements RouterTreeNodeInterface
 
     public function setPattern(RouterInterface $router, string $pattern)
     {
-        $this->pattern = $pattern;
-        $path = explode('/', $pattern);
-        $this->nodePattern = end($path);
-        $this->matchPattern = $router->replacePattern($this->nodePattern);
+        if (!$this->pattern) {
+            $this->pattern = $pattern;
+            $path = $this->patch = explode('/', $pattern);
+        }
+
+        if ($pattern === '/') {
+            $this->nodePattern = '/';
+            $this->matchPattern = '/';
+        } else {
+            if(!isset($path)) $path = explode('/', $pattern);
+            $this->matchPattern = $router->replacePattern($this->nodePattern);
+        }
 
         if ($this->matchPattern === $this->nodePattern) {
             $this->patternIsString = true;
@@ -120,6 +138,7 @@ class RouterTreeNode implements RouterTreeNodeInterface
         $this->parentNodeId = $parentNodeId;
     }
 
+
     public function methods(): array
     {
         return $this->methods;
@@ -131,6 +150,11 @@ class RouterTreeNode implements RouterTreeNodeInterface
         return $this->groupNames;
     }
 
+
+    public function patch(): ?array
+    {
+        return $this->patch;
+    }
 
     public function nodeId(): int
     {
